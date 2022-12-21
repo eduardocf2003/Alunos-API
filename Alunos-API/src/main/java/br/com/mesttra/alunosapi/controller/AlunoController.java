@@ -2,6 +2,7 @@ package br.com.mesttra.alunosapi.controller;
 
 import br.com.mesttra.alunosapi.entity.Aluno;
 import br.com.mesttra.alunosapi.repository.AlunoRepository;
+import br.com.mesttra.alunosapi.service.AlunoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -15,34 +16,33 @@ import java.util.Optional;
 public class AlunoController {
 
     @Autowired
-    AlunoRepository alunoRepo;
+    AlunoService alunoService;
 
     @ResponseStatus(code = HttpStatus.CREATED)
     @PostMapping
     public boolean inserirAluno(@RequestBody Aluno aluno) {
-        this.alunoRepo.save(aluno);
+        this.alunoService.inserirAluno(aluno);
         return true;
     }
 
     @GetMapping(path = "/{matricula}", produces = { MediaType.APPLICATION_JSON_VALUE })
-    public Optional<Aluno> buscaAluno(@PathVariable Long matricula) {
-        return this.alunoRepo.findById(matricula);
+    public Aluno buscaAluno(@PathVariable Long matricula) {
+        return this.alunoService.buscaAluno(matricula);
     }
 
     @GetMapping(produces = { MediaType.APPLICATION_JSON_VALUE })
     public List<Aluno> buscaAlunos() {
-        return (List<Aluno>) alunoRepo.findAll();
+        return alunoService.listaTodosAlunos();
     }
 
     @DeleteMapping(path = "/{matricula}")
-    public void deletarAluno(@PathVariable Long matricula) {
-        this.alunoRepo.deleteById(matricula);
-        return;
+    public boolean deletarAluno(@PathVariable Long matricula) {
+        return alunoService.removerAluno(matricula);
     }
 
     @GetMapping(path = "/{cpf}/buscar-cpf", produces = { MediaType.APPLICATION_JSON_VALUE })
-    public Optional<Aluno> buscaAlunoPorCpf(@PathVariable String cpf) {
-        return this.alunoRepo.findByCpf(cpf);
+    public Aluno buscaAlunoPorCpf(@PathVariable String cpf) {
+        return alunoService.buscarPorCpf(cpf);
     }
 
 }
