@@ -1,7 +1,10 @@
 package br.com.mesttra.alunosapi.service;
 
+import br.com.mesttra.alunosapi.dto.CriarAlunoDTO;
 import br.com.mesttra.alunosapi.entity.Aluno;
+import br.com.mesttra.alunosapi.exception.ErroDeNegocioException;
 import br.com.mesttra.alunosapi.repository.AlunoRepository;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,11 +17,12 @@ public class AlunoService {
     @Autowired
     AlunoRepository alunoRepo;
 
-    public boolean inserirAluno(Aluno aluno) {
-        if (alunoRepo.existsById(aluno.getMatricula())) {
-            return false;
-        }
-        alunoRepo.save(aluno);
+    public boolean inserirAluno(CriarAlunoDTO aluno) throws ErroDeNegocioException {
+
+        Aluno alunoEntity = new Aluno();
+        BeanUtils.copyProperties(aluno, alunoEntity);
+
+        alunoRepo.save(alunoEntity);
         return true;
     }
 

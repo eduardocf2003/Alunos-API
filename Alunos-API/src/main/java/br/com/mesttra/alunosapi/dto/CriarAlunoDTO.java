@@ -1,52 +1,31 @@
-package br.com.mesttra.alunosapi.entity;
+package br.com.mesttra.alunosapi.dto;
 
-import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.br.CPF;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import java.time.LocalDate;
 
-@Entity
-public class Aluno {
+public class CriarAlunoDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long matricula;
-
-    @Column(nullable = false)
+    @NotBlank
     private String nome;
 
-    @Column(name = "data_nascimento", nullable = false)
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDate dataNascimento;
 
-    @Column(unique = true)
+    @CPF
     private String cpf;
 
-    @Column(name = "valor_mensalidade", nullable = false)
+    @NotNull(message = "valorMensalidade não pode ser nulo")
     private Float valorMensalidade;
 
-    public Aluno() {
-
-    }
-
-    public Aluno(Long matricula, String nome, LocalDate dataNascimento, String cpf, Float valorMensalidade) {
-        this.matricula = matricula;
+    public CriarAlunoDTO(String nome, LocalDate dataNascimento, String cpf, Float valorMensalidade) {
         this.nome = nome;
         this.dataNascimento = dataNascimento;
         this.cpf = cpf;
         this.valorMensalidade = valorMensalidade;
-    }
-
-    public Long getMatricula() {
-        return matricula;
-    }
-
-    public void setMatricula(Long matricula) {
-        this.matricula = matricula;
     }
 
     public String getNome() {
@@ -79,16 +58,5 @@ public class Aluno {
 
     public void setValorMensalidade(Float valorMensalidade) {
         this.valorMensalidade = valorMensalidade;
-    }
-
-    @Override
-    public String toString() {
-        return "Aluno{" +
-                "matricula=" + matricula +
-                ", nome='" + nome + '\'' +
-                ", dataNascimento=" + dataNascimento +
-                ", cpf='" + cpf + '\'' +
-                ", valorMensalidade=" + valorMensalidade +
-                '}';
     }
 }

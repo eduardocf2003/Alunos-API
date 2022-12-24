@@ -1,8 +1,11 @@
 package br.com.mesttra.alunosapi.controller;
 
+import br.com.mesttra.alunosapi.dto.CriarAlunoDTO;
 import br.com.mesttra.alunosapi.entity.Aluno;
+import br.com.mesttra.alunosapi.exception.ErroDeNegocioException;
 import br.com.mesttra.alunosapi.repository.AlunoRepository;
 import br.com.mesttra.alunosapi.service.AlunoService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -20,7 +23,7 @@ public class AlunoController {
 
     @ResponseStatus(code = HttpStatus.CREATED)
     @PostMapping
-    public boolean inserirAluno(@RequestBody Aluno aluno) {
+    public boolean inserirAluno(@RequestBody @Valid CriarAlunoDTO aluno) throws ErroDeNegocioException {
         this.alunoService.inserirAluno(aluno);
         return true;
     }
